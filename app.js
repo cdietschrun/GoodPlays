@@ -11,6 +11,8 @@ import {
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
 import fetch from "node-fetch";
 import { request } from 'undici';
+import { MongoClient } from 'mongodb';
+import cors from 'cors';
 
 export async function StartExpressServer() {
   
@@ -18,10 +20,42 @@ export async function StartExpressServer() {
   const app = express();
   // Get port, or default to 3000
   const PORT = process.env.PORT || 3000;
-  // Parse request body and verifies incoming requests using discord-interactions package
+  // Parse request body and verifies incoming requests using discord-interactions package1
   app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
   const token = '';
+  app.use(cors());
 
+      // Replace the uri string with your MongoDB deployment's connection string.a
+const uri = `mongodb+srv://cdietschrunfast:${process.env.MONGO_DB_PASSWORD}@goodplays.yhu6h4r.mongodb.net/?retryWrites=true&w=majority`;
+const mongoClient = new MongoClient(uri);
+  
+  app.get('/data', async function (req, response) {
+
+    let data = {};
+  try {
+    const database = mongoClient.db("sample_mflix");
+    const movies = database.collection("movies");
+    // Query for a movie that has the title 'The Room'
+    const query = { title: "The Room" };
+    const options = {
+      // sort matched documents in descending order by rating
+      sort: { "imdb.rating": -1 },
+      // Include only the `title` and `imdb` fields in the returned document
+      projection: { _id: 0, title: 1, imdb: 1 },
+    };
+    const movie = await movies.findOne(query, options);
+    // since this method returns the matched document, not a cursor, print it directly
+    console.log(movie);
+    data = movie;
+  } finally {
+    await mongoClient.close();
+  }
+
+  //run().catch(console.dir);  
+    response.send(data);
+    
+  });
+  
   app.get('/redirect', async function (req, response) {
 
     console.log(req.query);

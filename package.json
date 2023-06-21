@@ -9,7 +9,6 @@
   },
   "scripts": {
     "start": "node discordjs-app.js",
-    "startOld": "node app.js",
     "register": "node commands.js",
     "dev": "nodemon app.js"
   },

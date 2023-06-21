@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require('discord.js');
+import { SlashCommandBuilder } from'discord.js';
 
-module.exports = {
+const pingObj = {
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Replies with Paong!'),
@@ -8,3 +8,5 @@ module.exports = {
 		await interaction.reply('Pong!');
 	},
 };
+
+export default pingObj

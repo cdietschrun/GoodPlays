@@ -1,7 +1,7 @@
-const { Events } = require('discord.js');
-const util = require('util');
+import { Events } from 'discord.js';
+import util from 'util';
 
-module.exports = {
+const presenceUpdate = {
 	name: Events.PresenceUpdate,
 	once: false,
 	execute(old, new1) {
@@ -10,3 +10,5 @@ module.exports = {
     console.log(util.inspect(new1, false, null, true));
 	},
 };
+
+export default presenceUpdate;

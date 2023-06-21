@@ -2,7 +2,8 @@
   "name": "getting-started",
   "version": "1.0.0",
   "description": "Discord example app",
-  "main": "app.js",
+  "main": "discordjs-app.js",
+  "type": "module",
   "engines": {
     "node": "16.x"
   },

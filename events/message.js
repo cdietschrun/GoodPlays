@@ -5,6 +5,7 @@ const messageCreate = {
 	once: false,
 	execute(message) {
 		console.log(`msg ${message}`);
+    console.log(new Date());
 	},
 };
 

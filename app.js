@@ -27,11 +27,11 @@ export async function StartExpressServer() {
   app.use(cors());
   
   app.get('/data', async function (req, response) {
-  
+    
   let collection = await db.collection("game_play");
   let results = await collection.aggregate([
-    {"$project": {"gameName": 1, "timestamp": 1}},
-    {"$sort": {"timestamp": -1}},
+    {"$project": {"userId": 1, "gameName": 1, "startTimestamp": 1, "endTimestamp": 1}},
+    {"$sort": {"endTimestamp": -1}},
     {"$limit": 3}
   ]).toArray();
   response.send(results).status(200);
@@ -55,7 +55,7 @@ export async function StartExpressServer() {
         'code': req.query.code,
         'redirect_uri': `https://nostalgic-pollen-antimatter.glitch.me/redirect`,
 
-        'scope': 'identify connections role_connections.write guilds.members.read'
+        'scope': 'identify'
       })
     }
 
@@ -67,38 +67,13 @@ export async function StartExpressServer() {
 
     console.log(discord_data);
 
-        const userResult = await request('https://discord.com/api/users/@me/connections', {
+        const userResult = await request('https://discord.com/api/users/@me', {
           headers: {
             authorization: `${discord_data.token_type} ${discord_data.access_token}`,
           },
         });
 
     console.log(await userResult.body.json());
-
-      const applicationRoleResult = await request(`https://discord.com/api/users/@me/applications/${process.env.APP_ID}/role-connection`, {
-      headers: {
-        authorization: `${discord_data.token_type} ${discord_data.access_token}`,
-      },
-    });
-
-    console.log(await applicationRoleResult.body.json());
-
-    const guildIdMemberResult = await request(`https://discord.com/api/users/@me/guilds/${process.env.TESTSERVER_GUILD_ID}/member`, {
-      headers: {
-        authorization: `${discord_data.token_type} ${discord_data.access_token}`,
-      },
-    });
-    
-    let memberRoles = await guildIdMemberResult.body.json();
-    console.log(memberRoles);
-    if (memberRoles.roles.includes('1120952650930856027'))
-    {
-      console.log('found it');
-    }
-    else {
-      console.log('did not find');
-    }
-    
     
     response.send('heyy');
   });

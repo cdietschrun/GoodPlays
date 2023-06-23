@@ -29,12 +29,21 @@ export async function StartExpressServer() {
   
   app.get('/data', async function (req, response) {
     
+    const userId = req.query.userId;
+    console.log(userId);
   let collection = await db.collection("game_play");
-  let results = await collection.aggregate([
-    {"$project": {"userId": 1, "gameName": 1, "startTimestamp": 1, "endTimestamp": 1}},
-    {"$sort": {"endTimestamp": -1}},
-    {"$limit": 3}
-  ]).toArray();
+//   let results = await collection.aggregate([
+//     {"$project": {"gameName": 1, "startTimestamp": 1, "endTimestamp": 1, "userId": 1}},
+//     {"$sort": {"endTimestamp": -1}},
+//     {"$limit": 3}
+//   ]).toArray();
+    const query = { userId: userId };
+    const options = {
+        sort: {endTimestamp: -1},
+        projection: { gameName: 1, startTimestamp: 1, endTimestamp: 1, _id: 0}
+    };
+
+    let results = await collection.find(query, options).toArray();
 
   //response.send('aaabcde');
   response.send(results).status(200);

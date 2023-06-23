@@ -7,10 +7,10 @@ const Home =  () => {
 	const { data, loading, error, getAuth, logout } = useOAuth2({
 		authorizeUrl: 'https://discord.com/oauth2/authorize',
 		clientId: '1120485891035648001',
-		redirectUri: `http://localhost:3000/callback`,
+		redirectUri: `${document.location.origin}/callback`,
 		scope: 'identify',
 		responseType: 'code',
-		exchangeCodeForTokenServerURL: 'http://localhost:9000/token',
+		exchangeCodeForTokenServerURL: 'http://192.168.1.24:9000/token',
 		exchangeCodeForTokenMethod: 'POST',
 		onSuccess: (payload) => console.log('Success', payload),
 		onError: (error_) => console.log('Error', error_),
@@ -26,9 +26,8 @@ const Home =  () => {
     if (data && data.access_token){
     fetch('https://discord.com/api/users/@me', {headers: { authorization: `${data.token_type} ${data.access_token}`}})
       .then((res) => res.json())
-      .then((movieData) => {
-        console.log(movieData);
-        setUserId(movieData.id);
+      .then((user) => {
+        setUserId(user.id);
       })
       .catch((err) => {
         console.log(err.message);
@@ -37,14 +36,13 @@ const Home =  () => {
   }, [data]);
 
   React.useEffect(() => {
-    if (userId){
-    fetch(`http://localhost:9000/data?id={userId}`)
-       .then((res) => res.json())
+    if (userId != ''){
+    fetch(`http://192.168.1.24:9000/data?userId=${userId}`)
+       .then((res) => res.json() )
        .then((movieData) => {
           console.log(movieData);
           setGame(movieData[0].gameName);
         let day = dayjs(movieData[0].startTimestamp);
-        console.log(day.isValid());
           setGameWhen(day.format('DD/MM/YYYY [at] h:mm A'));
         if (movieData[0].endTimestamp == null)
           {
@@ -86,11 +84,10 @@ const Home =  () => {
   if (isLoggedIn) {
     return (
       <div>
-        <pre>{JSON.stringify(data)}</pre>
+        <pre>data: {JSON.stringify(data)}</pre>
         <pre>{userId}</pre>
         <pre>{game}</pre>
         <pre>{gameWhen}</pre>
-        <pre>{active ? "active" : "inactive"}</pre>
         <pre>{duration} </pre>
         <button onClick={logout}>Logout</button>
       </div>

@@ -1,7 +1,5 @@
 import { Events } from 'discord.js';
 import db from '../connections/mongo.js';
-import util from 'util';
-import { request } from 'undici';
 
 async function test(userId, activity, isStart) {
   try {
@@ -42,32 +40,11 @@ async function test(userId, activity, isStart) {
   }
 };
 
-async function roles()
-{
-  ///guilds/{guild.id}/members/{user.id}a
-              const userResult = await request(`https://discord.com/api/guilds/1120487483889684490/members/131989430171992064`, {
-          headers: {
-            authorization: `Bot ${process.env.BOT_TOKEN}`,
-          },
-        });
-  console.log(await userResult.body.json());
-}
-
 const presenceUpdate = {
 	name: Events.PresenceUpdate,
 	once: false,
 	execute (old, new1) {
-		//console.log(`presence s ${old}, ${new1}`);
-    //console.log(util.inspect(old, false, null, true));
-    //console.log(util.inspect(new1, false, null, true));
-    //const oldActivity = old.activities[0];
-    //const newActivity = new1.activities[0];
-  
-    //roles(new1.userId);
-    console.log(old.activities);
-    console.log(new1.activities);
-    console.log(new1);
-    
+		
     if (!old.activities.length && new1.activities.length > 0)
       {
         console.log('game start');

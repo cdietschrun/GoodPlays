@@ -1,6 +1,8 @@
 import { Events } from 'discord.js';
 import db from '../connections/mongo.js';
 
+let activeGames= {};
+
 async function test(userId, activity, isStart) {
   try {
     console.log(activity);
@@ -20,11 +22,12 @@ async function test(userId, activity, isStart) {
 
       const result = await haiku.insertOne(play);
       console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      activeGames[userId] = result.insertedId;
     }
     else
     {
       
-      const filter = { userId: userId, gameName: activity.name };
+      const filter = { userId: userId, gameName: activity.name, _id: activeGames[userId] };
       
       const updatePlay = {
         $set: {
@@ -34,6 +37,7 @@ async function test(userId, activity, isStart) {
       
       const result = await haiku.updateOne(filter, updatePlay);
       console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
+      activeGames[userId] = null;
     }
   } finally {
     

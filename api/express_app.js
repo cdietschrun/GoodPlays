@@ -1,15 +1,14 @@
-import DiscordOauth2 from "discord-oauth2";
-import crypto from "crypto";
 import 'dotenv/config';
 import express from 'express';
 import { VerifyDiscordRequest } from './utils.js';
 import fetch from "node-fetch";
-import { request } from 'undici';
 import db from './connections/mongo.js';
 import cors from 'cors';
+import mailDaily from './mail.js';
 
-export async function StartExpressServer() {
-  
+export async function StartExpressServer()
+{
+
   // Create an express app
   const app = express();
   // Get port, or default to 9000
@@ -17,28 +16,58 @@ export async function StartExpressServer() {
   // Parse request body and verifies incoming requests using discord-interactions package1
   app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
   app.use(cors());
-  
+
   app.get('/data', async function (req, response)
   {
-    
     const userId = req.query.userId;
     let collection = await db.collection("game_play");
     const query = { userId: userId };
     const options =
     {
-        sort: {endTimestamp: -1},
-        projection: { gameName: 1, startTimestamp: 1, endTimestamp: 1, _id: 0}
+      sort: { endTimestamp: -1 },
+      projection: { gameName: 1, startTimestamp: 1, endTimestamp: 1, _id: 0 }
     };
 
     let results = await collection.find(query, options).toArray();
 
     response.send(results).status(200);
   });
-  
+
+  app.get('/email', async function (req, response)
+  {
+    const userId = req.query.userId;
+    let collection = await db.collection('game_play');
+    const results = collection.aggregate([
+      {
+        $match: {
+          $expr: {
+            $gt: [
+              "$startTimestamp",
+              { $dateSubtract: { startDate: "$$NOW", unit: "day", amount: 1 } }
+            ]
+          }, userId: userId
+        }
+      }
+    ]).sort({ "startTimestamp": -1 });
+
+    let html = '';
+    for await (const doc of results)
+    {
+      html += doc.gameName += ', ';
+    }
+
+    if (html != '')
+    {
+      mailDaily('test', html);
+    }
+
+    response.sendStatus(200);
+  });
+
   app.post('/token', async (request, reply) =>
   {
     const { code, client_id, redirect_uri } = request.query;
-    
+
     let options =
     {
       url: 'https://discord.com/api/oauth2/token',
@@ -56,15 +85,17 @@ export async function StartExpressServer() {
         'scope': 'identify'
       })
     };
-    
-    let discord_data = await fetch('https://discord.com/api/oauth2/token', options).then((response) => {
+
+    let discord_data = await fetch('https://discord.com/api/oauth2/token', options).then((response) =>
+    {
       return response.json();
     });
-    
+
     reply.send(discord_data);
   });
-          
-  app.listen(PORT, () => {
+
+  app.listen(PORT, () =>
+  {
     console.log('Listening on port', PORT);
   });
 

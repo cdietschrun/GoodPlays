@@ -49,7 +49,7 @@ const presenceUpdate = {
 	once: false,
 	execute (old, new1) {
 		
-    if (!old.activities.length && new1.activities.length > 0)
+    if (old && !old.activities.length && new1 && new1.activities.length > 0)
       {
         if (new1.activities[0].type == 0){
           console.log('game start');

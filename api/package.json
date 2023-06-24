@@ -10,8 +10,7 @@
   "scripts": {
     "start": "node discordjs_app.js",
     "register": "node commands.js",
-    "dev": "nodemon discordjs_app.js",
-    "mail": "node mail.js"
+    "dev": "nodemon discordjs_app.js"
   },
   "author": "Shay DeWael",
   "license": "MIT",

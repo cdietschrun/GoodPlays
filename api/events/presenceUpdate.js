@@ -51,14 +51,14 @@ const presenceUpdate = {
 		
     if (!old.activities.length && new1.activities.length > 0)
       {
-        if (new1.activities.type == 0){
+        if (new1.activities[0].type == 0){
           console.log('game start');
           test(new1.userId, new1.activities[0], true);
         }
       }
     else if (old.activities.length > 0 && !new1.activities.length)
       {
-        if (new1.activities.type == 0){
+        if (old.activities[0].type == 0){
           console.log('game end');
           test(new1.userId, old.activities[0], false);
         }

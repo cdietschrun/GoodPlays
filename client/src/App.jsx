@@ -1,5 +1,6 @@
 import { OAuthPopup, useOAuth2 } from "@tasoskakour/react-use-oauth2";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Card from "./Card";
 import * as React from "react";
 import dayjs from 'dayjs';
 
@@ -84,7 +85,7 @@ const Home =  () => {
     return (
       <div>
         <pre>data: {JSON.stringify(data)}</pre>
-
+        <Card />
         {game}<br/><br/>
         Last played on {gameWhen} for {duration}
         <pre>{active} </pre>

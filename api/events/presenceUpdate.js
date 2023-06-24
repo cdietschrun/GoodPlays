@@ -51,13 +51,17 @@ const presenceUpdate = {
 		
     if (!old.activities.length && new1.activities.length > 0)
       {
-        console.log('game start');
-        test(new1.userId, new1.activities[0], true);
+        if (new1.activities.type == 0){
+          console.log('game start');
+          test(new1.userId, new1.activities[0], true);
+        }
       }
     else if (old.activities.length > 0 && !new1.activities.length)
       {
-        console.log('game end');
-        test(new1.userId, old.activities[0], false);
+        if (new1.activities.type == 0){
+          console.log('game end');
+          test(new1.userId, old.activities[0], false);
+        }
       }
     //test(new1);
 	},

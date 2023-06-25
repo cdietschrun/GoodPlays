@@ -56,7 +56,7 @@ const presenceUpdate = {
           test(new1.userId, new1.activities[0], true);
         }
       }
-    else if (old.activities.length > 0 && !new1.activities.length)
+    else if (old && old.activities.length > 0 && new1 && !new1.activities.length)
       {
         if (old.activities[0].type == 0){
           console.log('game end');

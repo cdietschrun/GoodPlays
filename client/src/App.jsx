@@ -90,7 +90,6 @@ const Home =  () => {
         <pre>data: {JSON.stringify(data)}</pre>
         <Card title={game} date={gameWhen} duration={duration} imgUrl={img1} />
         <br/><br/>
-        Last played on {gameWhen} for {duration}
         <pre>{active} </pre>
         <button onClick={logout}>Logout</button>
       </div>

@@ -7,7 +7,7 @@ const Card = () => {
   // React.useEffect(() => {
 
   return (
-    <h1>card game here</h1>
+    <h1>card game2 here</h1>
   );
 };
 

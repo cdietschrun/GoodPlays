@@ -1,6 +1,6 @@
 import { OAuthPopup, useOAuth2 } from "@tasoskakour/react-use-oauth2";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Card from "./Card";
+import { Card } from "./components/Card";
 import * as React from "react";
 import dayjs from 'dayjs';
 
@@ -22,6 +22,8 @@ const Home =  () => {
   const [gameWhen, setGameWhen] = React.useState([]);
     const [active, setActive] = React.useState(false);
     const [duration, setDuration] = React.useState([]);
+    let img1 = "https://images.igdb.com/igdb/image/upload/t_cover_big/co2dc0.jpg";
+
 
   React.useEffect(() => {
     if (data && data.access_token){
@@ -38,6 +40,7 @@ const Home =  () => {
 
   React.useEffect(() => {
     if (userId !== ''){
+      console.log(`userId: ${userId}`);
     fetch(`http://192.168.1.24:9000/data?userId=${userId}`)
        .then((res) => res.json() )
        .then((gamePlays) => {
@@ -85,8 +88,8 @@ const Home =  () => {
     return (
       <div>
         <pre>data: {JSON.stringify(data)}</pre>
-        <Card />
-        {game}<br/><br/>
+        <Card title={game} date={gameWhen} duration={duration} imgUrl={img1} />
+        <br/><br/>
         Last played on {gameWhen} for {duration}
         <pre>{active} </pre>
         <button onClick={logout}>Logout</button>

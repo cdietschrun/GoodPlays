@@ -9,13 +9,14 @@ async function test(userId, activity, isStart) {
     const haiku = db.collection("game_play");
     
     //const options = { upsert: true };
+    const activityName = activity.name.replace(':', '').replace('™', '');
     
     // create a document to insert
     if (isStart)
     {
       const play = {
         userId: userId,
-        gameName: activity.name,
+        gameName: activityName,
         startTimestamp: activity.timestamps.start,
         endTimestamp: null
       }
@@ -26,12 +27,12 @@ async function test(userId, activity, isStart) {
     }
     else
     {
-      
-      const filter = { userId: userId, gameName: activity.name, _id: activeGames[userId] };
+      const filter = { userId: userId, gameName: activityName, _id: activeGames[userId] };
+      console.log(filter);
       
       const updatePlay = {
         $set: {
-           endTimestamp: new Date()     
+           endTimestamp: new Date()
         },
       };
       

@@ -17,7 +17,7 @@ async function test(userId, activity, isStart) {
       const play = {
         userId: userId,
         gameName: activityName,
-        startTimestamp: activity.timestamps.start,
+        startTimestamp: activity.timestamps ? activity.timestamps.start : new Date(),
         endTimestamp: null
       }
 

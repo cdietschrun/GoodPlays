@@ -22,7 +22,7 @@ async function test(userId, activity, isStart) {
       }
 
       const result = await haiku.insertOne(play);
-      console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      console.log(`[${new Date().toString()}] A document was inserted with the _id: ${result.insertedId}`);
       activeGames[userId] = result.insertedId;
     }
     else
@@ -37,7 +37,7 @@ async function test(userId, activity, isStart) {
       };
       
       const result = await haiku.updateOne(filter, updatePlay);
-      console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
+      console.log(`[${new Date().toString()}] ${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
       activeGames[userId] = null;
     }
   } finally {

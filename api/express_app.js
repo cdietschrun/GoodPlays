@@ -96,7 +96,7 @@ export async function StartExpressServer()
 
   app.listen(PORT, () =>
   {
-    console.log('Listening on port', PORT);
+    console.log(`[${new Date().toString()}] Listening on port: ${PORT}`);
   });
 
 }

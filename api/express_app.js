@@ -5,10 +5,10 @@ import fetch from "node-fetch";
 import db from './connections/mongo.js';
 import cors from 'cors';
 import mailDaily from './mail.js';
+import { startOrEndGame } from './events/presenceUpdate.js';
 
 export async function StartExpressServer()
 {
-
   // Create an express app
   const app = express();
   // Get port, or default to 9000
@@ -62,6 +62,16 @@ export async function StartExpressServer()
     }
 
     response.sendStatus(200);
+  });
+
+  app.post('/manual_game_log', async (request, reply) =>{
+    const { userId, gameName, isGameStart } = request.query;
+
+    console.log(gameName);
+    let activity = { name: gameName };
+    startOrEndGame(userId, activity, isGameStart == "true" ? true : false);
+
+    reply.sendStatus(200);
   });
 
   app.post('/token', async (request, reply) =>

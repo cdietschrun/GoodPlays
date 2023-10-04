@@ -3,12 +3,11 @@ import db from '../connections/mongo.js';
 
 let activeGames= {};
 
-async function test(userId, activity, isStart) {
+export async function startOrEndGame(userId, activity, isStart) {
   try {
     console.log(activity);
     const haiku = db.collection("game_play");
     
-    //const options = { upsert: true };
     const activityName = activity.name.replace(':', '').replace('™', '');
     
     // create a document to insert
@@ -54,17 +53,16 @@ const presenceUpdate = {
       {
         if (new1.activities[0].type == 0){
           console.log('game start');
-          test(new1.userId, new1.activities[0], true);
+          startOrEndGame(new1.userId, new1.activities[0], true);
         }
       }
     else if (old && old.activities.length > 0 && new1 && !new1.activities.length)
       {
         if (old.activities[0].type == 0){
           console.log('game end');
-          test(new1.userId, old.activities[0], false);
+          startOrEndGame(new1.userId, old.activities[0], false);
         }
       }
-    //test(new1);
 	},
 };
 

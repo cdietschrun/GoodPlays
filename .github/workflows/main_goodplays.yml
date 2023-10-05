@@ -5,9 +5,6 @@ name: Build and deploy Node.js app to Azure Web App - goodplays
 
 on:
   push:
-    paths:
-      - '!README.md'
-      - '!**/.github/**'
     branches:
       - main
   workflow_dispatch:

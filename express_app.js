@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
 import { VerifyDiscordRequest } from './utils.js';
-import fetch from "node-fetch";
 import db from './connections/mongo.js';
 import cors from 'cors';
 import mailDaily from './mail.js';
 import { startOrEndGame } from './events/presenceUpdate.js';
+import axios from 'axios';
 
 export async function StartExpressServer()
 {
@@ -64,7 +64,8 @@ export async function StartExpressServer()
     response.sendStatus(200);
   });
 
-  app.post('/manual_game_log', async (request, reply) =>{
+  app.post('/manual_game_log', async (request, reply) =>
+  {
     const { userId, gameName, isGameStart } = request.query;
 
     console.log(gameName);
@@ -74,34 +75,34 @@ export async function StartExpressServer()
     reply.sendStatus(200);
   });
 
-  app.post('/token', async (request, reply) =>
+  app.get('/callback', async (request, reply) =>
   {
-    const { code, client_id, redirect_uri } = request.query;
+    const { code } = request.query;
 
-    let options =
-    {
-      url: 'https://discord.com/api/oauth2/token',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        'client_id': client_id,
-        'client_secret': process.env.DISCORD_TOKEN,
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': redirect_uri,
+    // Define your Discord application's client ID and client secret
+    const redirectUri = 'http://localhost:3000/callback'; // Must match the one in your Discord app settings
 
-        'scope': 'identify'
-      })
-    };
+    // Use axios to send a POST request to Discord's token endpoint to exchange the code for an access token
+    const response = await axios.post(
+      'https://discord.com/api/oauth2/token',
+      new URLSearchParams({
+        client_id: process.env.APP_ID,
+        client_secret: process.env.DISCORD_TOKEN,
+        code,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code',
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
 
-    let discord_data = await fetch('https://discord.com/api/oauth2/token', options).then((response) =>
-    {
-      return response.json();
-    });
+    // The response should contain the access token
+    const accessToken = response.data.access_token;
 
-    reply.send(discord_data);
+    reply.send(accessToken).status(200);
   });
 
   app.listen(PORT, () =>

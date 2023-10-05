@@ -79,7 +79,7 @@ export async function StartExpressServer()
   {
     const { code } = request.query;
 
-    // Define your Discord application's client ID and client secret
+    // Define your Discord application's client ID and client secret test
     const redirectUri = 'http://localhost:3000/callback'; // Must match the one in your Discord app settings
 
     // Use axios to send a POST request to Discord's token endpoint to exchange the code for an access token

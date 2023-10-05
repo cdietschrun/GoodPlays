@@ -1,4 +1,3 @@
 {
-    "appService.defaultWebAppToDeploy": "/subscriptions/36107a3e-a5ed-4f6d-b7c2-93e2c01542c9/resourceGroups/goodplays-rg/providers/Microsoft.Web/sites/goodplays",
-    "appService.deploySubpath": "api"
+    "appService.showBuildDuringDeployPrompt": false
 }

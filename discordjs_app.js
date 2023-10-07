@@ -2,8 +2,6 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import { StartExpressServer } from './express_app.js';
-
 
 // Create a new client instance
 const client = new Client({ intents: [
@@ -47,4 +45,3 @@ fs.readdirSync(new URL('./events', import.meta.url)).forEach((dirContent) => {
 });
 
 client.login(process.env.BOT_TOKEN);
-StartExpressServer();

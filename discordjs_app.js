@@ -2,6 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import express from 'express';
 
 // Create a new client instance
 const client = new Client({ intents: [
@@ -45,3 +46,9 @@ fs.readdirSync(new URL('./events', import.meta.url)).forEach((dirContent) => {
 });
 
 client.login(process.env.BOT_TOKEN);
+const app = express();
+const PORT = process.env.PORT || 9000;
+app.listen(PORT, () =>
+{
+  console.log(`[${new Date().toString()}] Listening on port: ${PORT}`);
+});

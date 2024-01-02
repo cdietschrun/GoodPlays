@@ -6,7 +6,7 @@ let activeGames= {};
 export async function startOrEndGame(userId, activity, isStart) {
   try {
     console.log(activity);
-    const haiku = db.collection("game_play");
+    const gamePlays = db.collection("game_play");
     
     const activityName = activity.name.replace(':', '').replace('™', '');
     
@@ -20,7 +20,7 @@ export async function startOrEndGame(userId, activity, isStart) {
         endTimestamp: null
       }
 
-      const result = await haiku.insertOne(play);
+      const result = await gamePlays.insertOne(play);
       console.log(`[${new Date().toString()}] A document was inserted with the _id: ${result.insertedId}`);
       activeGames[userId] = result.insertedId;
     }
@@ -35,7 +35,7 @@ export async function startOrEndGame(userId, activity, isStart) {
         },
       };
       
-      const result = await haiku.updateOne(filter, updatePlay);
+      const result = await gamePlays.updateOne(filter, updatePlay);
       console.log(`[${new Date().toString()}] ${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
       activeGames[userId] = null;
     }

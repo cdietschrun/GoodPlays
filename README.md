@@ -2,4 +2,4 @@ GoodPlays - a Discord bot that subscribes to a server's user's Presence (now pla
 
 For front end, see https://github.com/cdietschrun/GoodPlays-Dashboard
 
-[![Build and deploy Node.js app to Azure Web App - goodplays](https://github.com/cdietschrun/GoodPlays/.github/workflows/main_goodplays-bot.yml/badge.svg)](https://github.com/cdietschrun/GoodPlays/.github/workflows/main_goodplays-bot.yml)
+[![Build and deploy Goodplay Discord bot](https://github.com/cdietschrun/GoodPlays/actions/workflows/main_goodplays-bot.yml/badge.svg)](https://github.com/cdietschrun/GoodPlays/actions/workflows/main_goodplays-bot.yml)

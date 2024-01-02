@@ -13,23 +13,6 @@ const client = new Client({ intents: [
 ] });
 
 client.commands = new Collection();
-const foldersPath = path.join(import.meta.url, '../commands');
-
-fs.readdirSync(new URL('./commands', import.meta.url)).forEach((dirContent) => {
-	const commandsPath = path.join(foldersPath, dirContent);
-	const commandFiles = fs.readdirSync(new URL(commandsPath, import.meta.url)).filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-    import(filePath).then((exported) => {
-      const command = exported.default;
-		if ('data' in command && 'execute' in command) {
-			client.commands.set(command.data.name, command);
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-		}
-      });
-	}
-});
 
 const eventsPath = path.join(import.meta.url, '../events');
 fs.readdirSync(new URL('./events', import.meta.url)).forEach((dirContent) => {

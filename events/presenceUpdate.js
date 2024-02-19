@@ -9,7 +9,7 @@ export async function startOrEndGame(userId, activity, isStart) {
     const gamePlays = db.collection("game_play");
     
     const activityName = activity.name.replace(':', '').replace('™', '');
-    
+
     // create a document to insert
     if (isStart)
     {
@@ -50,19 +50,46 @@ const presenceUpdate = {
 	execute (old, new1) {
 		
     if (old && !old.activities.length && new1 && new1.activities.length > 0)
+    {
+      if (new1.activities[0].name == 'PCSX2' && new1.activities[0].details == 'No Game Running')
       {
-        if (new1.activities[0].type == 0){
+        console.log('pcsx2 no game running');
+        return;
+      }
+
+      if (new1.activities[0].type == 0)
+      {
+        console.log('game start');
+        startOrEndGame(new1.userId, new1.activities[0], true);
+      }
+    }
+    else if (old && old.activities.length && old.activities[0].name == 'PCSX2' && old.activities[0].details == 'No Game Running'
+    && new1 && new1.activities.length > 0 && new1.activities[0].name == 'PCSX2')
+    {
+        new1.activities[0].name = new1.activities[0].details + ' on PCSX2';
+        if (new1.activities[0].type == 0)
+        {
           console.log('game start');
           startOrEndGame(new1.userId, new1.activities[0], true);
         }
-      }
+    }
     else if (old && old.activities.length > 0 && new1 && !new1.activities.length)
-      {
-        if (old.activities[0].type == 0){
-          console.log('game end');
-          startOrEndGame(new1.userId, old.activities[0], false);
-        }
+    {
+      if (old.activities[0].type == 0){
+        console.log('game end');
+        startOrEndGame(new1.userId, old.activities[0], false);
       }
+    }
+    else if (old && old.activities[0].name == 'PCSX2' && old.activities[0].details != 'No Game Running'
+    && new1 && new1.activities.length > 0 && new1.activities[0].name == 'PCSX2' && new1.activities[0].details == 'No Game Running')
+    {
+      old.activities[0].name = old.activities[0].details + ' on PCSX2';
+      if (old.activities[0].type == 0){
+        console.log('game end');
+        startOrEndGame(new1.userId, old.activities[0], false);
+      }
+    }
+    
 	},
 };
 

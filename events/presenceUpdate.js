@@ -51,9 +51,9 @@ const presenceUpdate = {
 		
     if (old && !old.activities.length && new1 && new1.activities.length > 0)
     {
-      if (new1.activities[0].name == 'PCSX2' && new1.activities[0].details == 'No Game Running')
+      if ((new1.activities[0].name == 'PCSX2' || new1.activities[0].name == 'DuckStation') && new1.activities[0].details == 'No Game Running')
       {
-        console.log('pcsx2 no game running');
+        console.log(new1.activities[0].name + ': no game running');
         return;
       }
 
@@ -63,10 +63,10 @@ const presenceUpdate = {
         startOrEndGame(new1.userId, new1.activities[0], true);
       }
     }
-    else if (old && old.activities.length && old.activities[0].name == 'PCSX2' && old.activities[0].details == 'No Game Running'
-    && new1 && new1.activities.length > 0 && new1.activities[0].name == 'PCSX2')
+    else if (old && old.activities.length && (old.activities[0].name == 'PCSX2' || old.activities[0].name == 'DuckStation') && old.activities[0].details == 'No Game Running'
+    && new1 && new1.activities.length > 0 && (new1.activities[0].name == 'PCSX2' || new1.activities[0].name == 'DuckStation'))
     {
-        new1.activities[0].name = new1.activities[0].details + ' on PCSX2';
+        new1.activities[0].name = new1.activities[0].details + ' on ' + new1.activities[0].name;
         if (new1.activities[0].type == 0)
         {
           console.log('game start');
@@ -80,10 +80,10 @@ const presenceUpdate = {
         startOrEndGame(new1.userId, old.activities[0], false);
       }
     }
-    else if (old && old.activities[0].name == 'PCSX2' && old.activities[0].details != 'No Game Running'
-    && new1 && new1.activities.length > 0 && new1.activities[0].name == 'PCSX2' && new1.activities[0].details == 'No Game Running')
+    else if (old && (old.activities[0].name == 'PCSX2' || old.activities[0].name == 'DuckStation') && old.activities[0].details != 'No Game Running'
+    && new1 && new1.activities.length > 0 && (new1.activities[0].name == 'PCSX2' || new1.activities[0].name == 'DuckStation') && new1.activities[0].details == 'No Game Running')
     {
-      old.activities[0].name = old.activities[0].details + ' on PCSX2';
+      old.activities[0].name = old.activities[0].details + ' on ' + new1.activities[0].name;
       if (old.activities[0].type == 0){
         console.log('game end');
         startOrEndGame(new1.userId, old.activities[0], false);
